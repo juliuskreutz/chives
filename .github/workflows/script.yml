@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v2
+        with:
+          ssh-key: "${{ secrets.COMMIT_KEY }}"
 
       - name: Get Rust Toolchain
         uses: actions-rs/toolchain@v1
