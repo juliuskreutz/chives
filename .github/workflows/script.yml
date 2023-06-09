@@ -22,22 +22,8 @@ jobs:
       - name: Run Script
         run: cargo run
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+      - name: Update release
+        uses: johnwbyrd/update-release@v1
         with:
-          tag_name: "latest"
-          release_name: Latest Release
-          body: Latest Release
-
-      - name: Upload Linux Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: chives.csv
-          asset_name: chives.csv
-          asset_content_type: text/csv
+          token: ${{ secrets.PAT }}
+          files: chives.csv
