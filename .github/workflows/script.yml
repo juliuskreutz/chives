@@ -13,8 +13,6 @@ jobs:
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v2
-        with:
-          ssh-key: "${{ secrets.COMMIT_KEY }}"
 
       - name: Get Rust Toolchain
         uses: actions-rs/toolchain@v1
@@ -28,7 +26,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
           tag_name: "latest"
           release_name: Latest Release
@@ -37,7 +35,7 @@ jobs:
       - name: Upload Linux Release
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: chives.csv
