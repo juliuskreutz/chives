@@ -1,0 +1,31 @@
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+name: Script
+
+jobs:
+  run:
+    name: Script
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v2
+
+      - name: Get Rust Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Run Script
+        run: cargo run
+
+      - name: View context attributes
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { owner, repo } = context.repo
+            const { data: { id } } = await github.repos.getLatestRelease({ owner, repo })
+            await github.repos.deleteRelease({ owner, repo, release_id: id })
