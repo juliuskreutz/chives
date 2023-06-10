@@ -29,7 +29,7 @@ jobs:
           script: |
             const { owner, repo } = context.repo
 
-            github.rest.git.deleteRef({ owner, repo, ref: "tags/latest" })
+            await github.rest.git.deleteRef({ owner, repo, ref: "tags/latest" })
 
             await github.rest.git.createRef({ owner, repo, ref: "refs/tags/latest", sha: context.sha })
 
