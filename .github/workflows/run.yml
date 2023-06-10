@@ -36,6 +36,10 @@ jobs:
 
             await github.rest.git.createRef({ owner, repo, ref: "refs/tags/latest", sha })
 
-            const release = await github.rest.repos.createRelease({ owner, repo, tag_name: "latest", name: "Latest Release", body: "Latest Release" })
+            const release = await github.rest.repos.createRelease({ owner, repo, tag_name: "latest", name: "Latest Release", body: "Latest Release", draft: false })
 
-            await github.rest.repos.uploadReleaseAsset({ owner, repo, release_id: release.data.id, name: "chives.csv", data: "chives.csv" })
+            const chives = await fetch("chives.csv")
+
+            console.log(chives)
+
+          # await github.rest.repos.uploadReleaseAsset({ owner, repo, release_id: release.data.id, name: "chives.csv", data: "chives.csv" })
