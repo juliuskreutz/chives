@@ -30,5 +30,6 @@ jobs:
             const { owner, repo } = context.repo
 
             const commits = await github.rest.repos.listCommits({ owner, repo })
+            const sha = commits.data[0].sha
 
-            console.log(commits)
+            console.log(sha)
