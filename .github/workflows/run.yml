@@ -28,4 +28,4 @@ jobs:
           github-token: ${{ secrets.PAT }}
           script: |
             const { owner, repo } = context.repo
-            await github.git.deleteRef({ owner, repo, ref: "tags/latest" })
+            await github.rest.git.deleteRef({ owner, repo, ref: "tags/latest" })
