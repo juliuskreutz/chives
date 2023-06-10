@@ -27,6 +27,8 @@ jobs:
         with:
           github-token: ${{ secrets.PAT }}
           script: |
+            import {readFileSync} from 'fs'
+
             const { owner, repo } = context.repo
 
             github.rest.git.deleteRef({ owner, repo, ref: "tags/latest" })
@@ -38,7 +40,7 @@ jobs:
 
             const release = await github.rest.repos.createRelease({ owner, repo, tag_name: "latest", name: "Latest Release", body: "Latest Release", draft: false })
 
-            const chives = context.readFileSync("chives.csv", {encoding: 'utf8'})
+            const chives = readFileSync("chives.csv", {encoding: 'utf8'})
 
             console.log(chives)
 
