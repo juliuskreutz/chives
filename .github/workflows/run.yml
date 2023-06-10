@@ -40,6 +40,6 @@ jobs:
 
             const fs = require("fs")
 
-            console.log("Hello World")
+            fs.readFile('README.md', 'utf8', function(err, data){ console.log(data) })
 
           # await github.rest.repos.uploadReleaseAsset({ owner, repo, release_id: release.data.id, name: "chives.csv", data: "chives.csv" })
