@@ -15,6 +15,8 @@ struct Data {
     series: String,
     #[serde(rename = "Hidden")]
     hidden: bool,
+    #[serde(rename = "Rarity")]
+    rarity: String,
 }
 
 fn main() -> Result<()> {
@@ -51,11 +53,14 @@ fn main() -> Result<()> {
 
         let hidden = value["ShowType"] == json!("ShowAfterFinish");
 
+        let rarity = value["Rarity"].as_str().unwrap().to_string();
+
         let data = Data {
             id,
             title,
             series,
             hidden,
+            rarity,
         };
         writer.serialize(data)?;
     }
