@@ -28,5 +28,4 @@ jobs:
           github-token: ${{ secrets.PAT }}
           script: |
             const { owner, repo } = context.repo
-            const { data: { id } } = await github.rest.repos.getLatestRelease({ owner, repo })
-            await github.rest.repos.deleteRelease({ owner, repo, release_id: id })
+            await github.rest.repos.deleteRef({ owner, repo, ref: "tags/latest" })
