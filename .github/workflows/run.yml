@@ -7,20 +7,20 @@ name: Run
 
 jobs:
   run:
-    name: Script
+    name: Run
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v2
 
-      - name: Get Rust Toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
+      # - name: Get Rust Toolchain
+      #   uses: actions-rs/toolchain@v1
+      #   with:
+      #     toolchain: stable
 
-      - name: Run Script
-        run: cargo run
+      # - name: Run Script
+      #   run: cargo run
 
       - name: Update Release
         uses: actions/github-script@v6
@@ -29,6 +29,6 @@ jobs:
           script: |
             const { owner, repo } = context.repo
 
-            const commits = octokit.rest.repos.listCommits({ owner, repo })
+            const commits = github.rest.repos.listCommits({ owner, repo })
 
             console.log(commits[0])
