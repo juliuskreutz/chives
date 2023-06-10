@@ -31,10 +31,10 @@ jobs:
 
             github.rest.git.deleteRef({ owner, repo, ref: "tags/latest" })
 
-            const commits = await github.rest.repos.listCommits({ owner, repo })
-            const sha = commits.data[0].sha
+            await github.rest.git.createRef({ owner, repo, ref: "refs/tags/latest", sha: context.sha })
 
-            await github.rest.git.createRef({ owner, repo, ref: "refs/tags/latest", sha })
+            const { data: { id } } = await github.repos.getLatestRelease({ owner, repo })
+            await github.repos.deleteRelease({ owner, repo, release_id: id })
 
             const release = await github.rest.repos.createRelease({ owner, repo, tag_name: "latest", name: "Latest Release", body: "Latest Release", draft: false })
 
