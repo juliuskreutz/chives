@@ -2,6 +2,7 @@ use std::{fs::File, io::BufWriter};
 
 use anyhow::Result;
 use csv::WriterBuilder;
+use regex::{Captures, Regex};
 use serde::Serialize;
 use serde_json::{json, Value};
 
@@ -43,6 +44,7 @@ fn main() -> Result<()> {
             .unwrap()
             .to_string();
         let title = text_map[title_hash].as_str().unwrap().to_string();
+        let title = clean(&title);
 
         let series_id = value["SeriesID"].as_i64().unwrap().to_string();
         let series_hash = achievement_series[series_id]["SeriesTitle"]["Hash"]
@@ -66,4 +68,14 @@ fn main() -> Result<()> {
     }
 
     Ok(())
+}
+
+fn clean(s: &str) -> String {
+    let re = Regex::new(r"<.*>(.*)</.*>").unwrap();
+
+    let s = re
+        .replace_all(s, |c: &Captures| c.get(1).unwrap().as_str().to_string())
+        .to_string();
+
+    unidecode::unidecode(&s)
 }
