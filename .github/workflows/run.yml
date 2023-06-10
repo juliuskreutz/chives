@@ -31,4 +31,4 @@ jobs:
 
             const commits = await github.rest.repos.listCommits({ owner, repo })
 
-            console.log(commits[0])
+            console.log(commits)
