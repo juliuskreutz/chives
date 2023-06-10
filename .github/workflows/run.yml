@@ -22,10 +22,13 @@ jobs:
       - name: Run Script
         run: cargo run
 
-      - name: View context attributes
+      - name: Update Release
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.PAT }}
           script: |
             const { owner, repo } = context.repo
-            await github.rest.git.deleteRef({ owner, repo, ref: "tags/latest" })
+
+            const commits = octokit.rest.repos.listCommits({ owner, repo })
+
+            console.log(commits[0])
