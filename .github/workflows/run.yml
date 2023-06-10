@@ -29,4 +29,6 @@ jobs:
           script: |
             const { owner, repo } = context.repo
 
-            console.log(github.rest.repos.listCommits({ owner, repo }))
+            const commits = await github.rest.repos.listCommits({ owner, repo })
+
+            console.log(commits[0])
