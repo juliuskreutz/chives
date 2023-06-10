@@ -39,4 +39,6 @@ jobs:
             const release = await github.rest.repos.createRelease({ owner, repo, tag_name: "latest", name: "Latest Release", body: "Latest Release", draft: false })
 
             const fs = require("fs")
-            fs.readFile('chives.csv', 'utf8', function(err, data){ await github.rest.repos.uploadReleaseAsset({ owner, repo, release_id: release.data.id, name: "chives.csv", data }) })
+            const data = fs.readFileSync("chives.csv", "utf8");
+
+            await github.rest.repos.uploadReleaseAsset({ owner, repo, release_id: release.data.id, name: "chives.csv", data })
