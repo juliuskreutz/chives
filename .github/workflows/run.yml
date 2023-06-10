@@ -38,7 +38,7 @@ jobs:
 
             const release = await github.rest.repos.createRelease({ owner, repo, tag_name: "latest", name: "Latest Release", body: "Latest Release", draft: false })
 
-            const x = require('./README.md')
+            const x = await github.request('./README.md')
 
             console.log(x)
 
