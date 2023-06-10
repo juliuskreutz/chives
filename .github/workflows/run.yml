@@ -28,16 +28,14 @@ jobs:
           github-token: ${{ secrets.PAT }}
           script: |
             const { owner, repo } = context.repo
-            const tag_name = "latest"
-            const ref = "refs/tags/" + tag_name
 
-            github.rest.git.deleteRef({ owner, repo, ref })
+            github.rest.git.deleteRef({ owner, repo, ref: "tags/latest" })
 
             const commits = await github.rest.repos.listCommits({ owner, repo })
             const sha = commits.data[0].sha
 
-            await github.rest.git.createRef({ owner, repo, ref, sha })
+            await github.rest.git.createRef({ owner, repo, ref: "refs/tags/latest", sha })
 
-            const release = await github.rest.repos.createRelease({ owner, repo, tag_name })
+            const release = await github.rest.repos.createRelease({ owner, repo, tag_name: "latest" })
 
             console.log(release)
