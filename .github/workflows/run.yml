@@ -3,7 +3,7 @@ on:
     - cron: "*/30 * * * *"
   workflow_dispatch:
 
-name: Script
+name: Run
 
 jobs:
   run:
@@ -27,5 +27,5 @@ jobs:
         with:
           script: |
             const { owner, repo } = context.repo
-            const { data: { id } } = await github.repos.getLatestRelease({ owner, repo })
-            await github.repos.deleteRelease({ owner, repo, release_id: id })
+            const { data: { id } } = await github.rest.repos.getLatestRelease({ owner, repo })
+            await github.rest.repos.deleteRelease({ owner, repo, release_id: id })
