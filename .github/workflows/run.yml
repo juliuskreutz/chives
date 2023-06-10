@@ -29,6 +29,4 @@ jobs:
           script: |
             const { owner, repo } = context.repo
 
-            const commits = github.rest.repos.listCommits({ owner, repo })
-
-            console.log(commits[0])
+            console.log(github.rest.repos.listCommits({ owner, repo }))
