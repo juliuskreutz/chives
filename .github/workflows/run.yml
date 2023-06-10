@@ -29,7 +29,9 @@ jobs:
           script: |
             const { owner, repo } = context.repo
 
+            const ref = "tags/latest"
+
             const commits = await github.rest.repos.listCommits({ owner, repo })
             const sha = commits.data[0].sha
 
-            console.log(sha)
+            await github.rest.git.createRef({ owner, repo, ref, sha })
