@@ -14,13 +14,13 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v2
 
-      - name: Get Rust Toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
+      # - name: Get Rust Toolchain
+      #   uses: actions-rs/toolchain@v1
+      #   with:
+      #     toolchain: stable
 
-      - name: Run Script
-        run: cargo run
+      # - name: Run Script
+      #   run: cargo run
 
       - name: Update Release
         uses: actions/github-script@v6
@@ -37,8 +37,6 @@ jobs:
             await github.rest.git.createRef({ owner, repo, ref: "refs/tags/latest", sha })
 
             const release = await github.rest.repos.createRelease({ owner, repo, tag_name: "latest", name: "Latest Release", body: "Latest Release", draft: false })
-
-            const glob = require('@actions/glob');
 
             const globber = await glob.create('**')
             for await (const file of globber.globGenerator()) {
