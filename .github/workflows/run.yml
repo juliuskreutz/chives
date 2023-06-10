@@ -38,4 +38,4 @@ jobs:
 
             const release = await github.rest.repos.createRelease({ owner, repo, tag_name: "latest", name: "Latest Release", body: "Latest Release" })
 
-            await .rest.repos.uploadReleaseAsset({ owner, repo, release_id: release.data.id, name: "chives.csv", data: "chives.csv" })
+            await github.rest.repos.uploadReleaseAsset({ owner, repo, release_id: release.data.id, name: "chives.csv", data: "chives.csv" })
