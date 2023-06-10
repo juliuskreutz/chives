@@ -14,13 +14,13 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v2
 
-      # - name: Get Rust Toolchain
-      #   uses: actions-rs/toolchain@v1
-      #   with:
-      #     toolchain: stable
+      - name: Get Rust Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
 
-      # - name: Run Script
-      #   run: cargo run
+      - name: Run Script
+        run: cargo run
 
       - name: Update Release
         uses: actions/github-script@v6
@@ -39,7 +39,4 @@ jobs:
             const release = await github.rest.repos.createRelease({ owner, repo, tag_name: "latest", name: "Latest Release", body: "Latest Release", draft: false })
 
             const fs = require("fs")
-
-            fs.readFile('README.md', 'utf8', function(err, data){ console.log(data) })
-
-          # await github.rest.repos.uploadReleaseAsset({ owner, repo, release_id: release.data.id, name: "chives.csv", data: "chives.csv" })
+            fs.readFile('chives.csv', 'utf8', function(err, data){ await github.rest.repos.uploadReleaseAsset({ owner, repo, release_id: release.data.id, name: "chives.csv", data }) })
