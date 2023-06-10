@@ -34,11 +34,12 @@ jobs:
             await github.rest.git.createRef({ owner, repo, ref: "refs/tags/latest", sha: context.sha })
 
             const { data: { id } } = await github.rest.repos.getLatestRelease({ owner, repo })
+
             await github.rest.repos.deleteRelease({ owner, repo, release_id: id })
 
-            const release = await github.rest.repos.createRelease({ owner, repo, tag_name: "latest", name: "Latest Release", body: "Latest Release", draft: false })
+            const { data: { id } } = await github.rest.repos.createRelease({ owner, repo, tag_name: "latest", name: "Latest Release", body: "Latest Release", draft: false })
 
             const fs = require("fs")
             const data = fs.readFileSync("chives.csv", "utf8");
 
-            await github.rest.repos.uploadReleaseAsset({ owner, repo, release_id: release.data.id, name: "chives.csv", data })
+            await github.rest.repos.uploadReleaseAsset({ owner, repo, release_id: id, name: "chives.csv", data })
