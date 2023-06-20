@@ -3,7 +3,7 @@ on:
     - cron: "*/30 * * * *"
   workflow_dispatch:
 
-permission: write-all
+permissions: write-all
 
 name: Run
 
