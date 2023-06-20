@@ -3,6 +3,8 @@ on:
     - cron: "*/30 * * * *"
   workflow_dispatch:
 
+permission: write-all
+
 name: Run
 
 jobs:
@@ -14,93 +16,119 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v2
 
-      - name: Get Rust Toolchain
-        uses: actions-rs/toolchain@v1
+      # - name: Get Rust Toolchain
+      #   uses: actions-rs/toolchain@v1
+      #   with:
+      #     toolchain: stable
+
+      # - name: Run Script
+      #   run: cargo run
+
+      # - name: Delete Tag
+      #   uses: actions/github-script@v6
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     script: |
+      #       const { owner, repo } = context.repo
+
+      #       await github.rest.git.deleteRef({ owner, repo, ref: "tags/latest" })
+
+      # - name: Delete Release
+      #   uses: actions/github-script@v6
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     script: |
+      #       const { owner, repo } = context.repo
+
+      #       const { data: { id } } = await github.rest.repos.getLatestRelease({ owner, repo })
+      #       await github.rest.repos.deleteRelease({ owner, repo, release_id: id })
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          toolchain: stable
+          body: Latest Release
+          # files: chives.csv
+          tag_name: v1.0
 
-      - name: Run Script
-        run: cargo run
+      # - name: Delete Tag
+      #   if: success() || failure()
+      #   uses: actions/github-script@v6
+      #   with:
+      #     github-token: ${{ secrets.PAT }}
+      #     retries: 3
+      #     script: |
+      #       const { owner, repo } = context.repo
 
-      - name: Delete Tag
-        if: success() || failure()
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.PAT }}
-          retries: 3
-          script: |
-            const { owner, repo } = context.repo
+      #       await github.rest.git.deleteRef({
+      #           owner,
+      #           repo,
+      #           ref: "tags/latest",
+      #       })
 
-            await github.rest.git.deleteRef({
-                owner,
-                repo,
-                ref: "tags/latest",
-            })
+      # - name: Create Tag
+      #   if: success() || failure()
+      #   uses: actions/github-script@v6
+      #   with:
+      #     github-token: ${{ secrets.PAT }}
+      #     retries: 3
+      #     script: |
+      #       const { owner, repo } = context.repo
 
-      - name: Create Tag
-        if: success() || failure()
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.PAT }}
-          retries: 3
-          script: |
-            const { owner, repo } = context.repo
+      #       await github.rest.git.createRef({
+      #           owner,
+      #           repo,
+      #           ref: "refs/tags/latest",
+      #           sha: context.sha,
+      #       })
 
-            await github.rest.git.createRef({
-                owner,
-                repo,
-                ref: "refs/tags/latest",
-                sha: context.sha,
-            })
+      # - name: Delete Release
+      #   if: success() || failure()
+      #   uses: actions/github-script@v6
+      #   with:
+      #     github-token: ${{ secrets.PAT }}
+      #     retries: 3
+      #     script: |
+      #       const { owner, repo } = context.repo
 
-      - name: Delete Release
-        if: success() || failure()
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.PAT }}
-          retries: 3
-          script: |
-            const { owner, repo } = context.repo
+      #       const { data: { id } } = await github.rest.repos.getLatestRelease({ owner, repo })
+      #       await github.rest.repos.deleteRelease({ owner, repo, release_id: id })
 
-            const { data: { id } } = await github.rest.repos.getLatestRelease({ owner, repo })
-            await github.rest.repos.deleteRelease({ owner, repo, release_id: id })
+      # - name: Create Release
+      #   if: success() || failure()
+      #   uses: actions/github-script@v6
+      #   with:
+      #     github-token: ${{ secrets.PAT }}
+      #     retries: 3
+      #     script: |
+      #       const { owner, repo } = context.repo
 
-      - name: Create Release
-        if: success() || failure()
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.PAT }}
-          retries: 3
-          script: |
-            const { owner, repo } = context.repo
+      #       await github.rest.repos.createRelease({
+      #           owner,
+      #           repo,
+      #           tag_name: "latest",
+      #           name: "Latest Release",
+      #           body: "Latest Release",
+      #           draft: false
+      #       })
 
-            await github.rest.repos.createRelease({
-                owner,
-                repo,
-                tag_name: "latest",
-                name: "Latest Release",
-                body: "Latest Release",
-                draft: false
-            })
+      # - name: Upload Csv
+      #   if: success() || failure()
+      #   uses: actions/github-script@v6
+      #   with:
+      #     github-token: ${{ secrets.PAT }}
+      #     retries: 3
+      #     script: |
+      #       const { owner, repo } = context.repo
 
-      - name: Upload Csv
-        if: success() || failure()
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.PAT }}
-          retries: 3
-          script: |
-            const { owner, repo } = context.repo
+      #       const { data: { id } } = await github.rest.repos.getLatestRelease({ owner, repo })
 
-            const { data: { id } } = await github.rest.repos.getLatestRelease({ owner, repo })
+      #       const fs = require("fs")
+      #       const data = fs.readFileSync("chives.csv", "utf8")
 
-            const fs = require("fs")
-            const data = fs.readFileSync("chives.csv", "utf8")
-
-            await github.rest.repos.uploadReleaseAsset({
-                owner,
-                repo,
-                release_id: id,
-                name: "chives.csv",
-                data
-            })
+      #       await github.rest.repos.uploadReleaseAsset({
+      #           owner,
+      #           repo,
+      #           release_id: id,
+      #           name: "chives.csv",
+      #           data
+      #       })
